@@ -11,7 +11,7 @@
 prepare <- function(input, output){
 
   model <- keras::keras_model(input, output)
-  deepviz::plot_model(model)
+  print(deepviz::plot_model(model))
   print(summary(model))
   return(model)
 }
