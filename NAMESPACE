@@ -2,6 +2,10 @@
 
 export(build)
 export(from_input)
+export(get_layer_names)
+export(get_layer_output)
+export(get_layer_weights)
+export(layer2index)
 export(prepare)
 export(to_categorical_mask)
 export(to_output)

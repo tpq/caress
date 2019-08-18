@@ -1,13 +1,13 @@
 Package: caress
 Title: Caress, a Gentler Introduction to Keras
-Version: 0.0.1
+Version: 0.0.2
 URL: http://github.com/tpq/caress
 BugReports: http://github.com/tpq/caress/issues
 Authors@R: c(
     person("Thomas", "Quinn", email = "contacttomquinn@gmail.com", role = c("aut", "cre"))
     )
 Description: Neural networks have lots of applications. A lot of people want to
-    learn how to use them. The keras package makes it easier to implement neural
+    learn how to use them. The keras package makes it easy to design neural
     network architectures. The caress package makes it even easier.
 License: GPL-2
 RoxygenNote: 6.1.1
