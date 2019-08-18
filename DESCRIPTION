@@ -1,11 +1,23 @@
 Package: caress
-Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Caress, a Gentler Introduction to Keras
+Version: 0.0.1
+URL: http://github.com/tpq/caress
+BugReports: http://github.com/tpq/caress/issues
+Authors@R: c(
+    person("Thomas", "Quinn", email = "contacttomquinn@gmail.com", role = c("aut", "cre"))
+    )
+Description: Neural networks have lots of applications. A lot of people want to
+    learn how to use them. The keras package makes it easier to implement neural
+    network architectures. The caress package makes it even easier.
+License: GPL-2
+RoxygenNote: 6.1.1
 Encoding: UTF-8
-LazyData: true
+Depends:
+    R (>= 3.2.2)
+Imports:
+    deepviz,
+    keras
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat
