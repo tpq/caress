@@ -1,3 +1,12 @@
+## caress 0.0.3
+---------------------
+* Add more helper functions
+    * `sample_random` bulk prepares a list of training and test sets
+    * `constraint_rows_to_unit_sum` constrains row sums of weights to 1
+    * `constraint_cols_to_unit_sum` constrains column sums of weights to 1
+    * `constraint_all_zeros` constrains all weights to 0
+    * `constraint_all_ones` constrains all weights to 1
+
 ## caress 0.0.2
 ---------------------
 * Add more helper functions

@@ -1,13 +1,25 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-Quick start
------------
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+## Quick start
 
 Welcome to the `caress` GitHub page!
 
 Neural networks have lots of applications. A lot of people want to learn how to use them. The keras package makes it easy to design neural network architectures. The caress package makes it even easier.
 
-``` r
+```{r, eval = FALSE}
 library(devtools)
 devtools::install_github("tpq/caress")
 library(caress)
@@ -16,7 +28,7 @@ library(keras)
 
 This package includes some helper functions that automate bread-and-butter network building. For example, they one-hot encode factors, normalize the feature input, set the input size, set the output size, and choose the correct loss function. I also wanted to make the functional API easier to use by going `from_input` on `to_output`.
 
-``` r
+```{r, eval = FALSE}
 data(iris)
 data <- sample_random(x = iris[,1:4], y = iris[,5], split = 80, normalize = TRUE)
 x_train <- data$train$x
@@ -34,7 +46,7 @@ model <- prepare(input, output)
 
 Now, we can compile and fit the model with a single function call.
 
-``` r
+```{r, eval = FALSE}
 history <- build(model, x_train, y_train, epochs = 100, batch_size = 8)
 evaluate(model, x_test, y_test)
 ```
