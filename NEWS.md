@@ -1,3 +1,14 @@
+## caress 0.0.4
+---------------------
+* Improve front-end
+    * `from_input` now supports lists of inputs
+    * `to_output` now supports lists of outputs
+    * `prepare` now supports lists of lists
+* Improve back-end
+    * Simplify `type_of_y` function to handle 2+D tensors
+    * Replace `type2loss` with `to_loss` function
+    * Have `to_output` call `type_of_y`
+
 ## caress 0.0.3
 ---------------------
 * Add more helper functions
