@@ -3,14 +3,32 @@
 #' This function automatically creates an input layer for
 #'  a provided matrix object.
 #'
-#' @param x A matrix. The input data.
+#' @param x A matrix or vector. The input data.
 #' @param name A string. The name of the layer.
+#' @param append_name A boolean. Toggles whether to give each
+#'  name a unique appendix. Used for backend only.
 #' @return A layer object.
 #' @importFrom keras layer_input
 #' @export
-from_input <- function(x, name = NULL){
+from_input <- function(x, name = NULL, append_name = FALSE){
 
-  layer_input(shape = dim(x)[-1], name = name)
+  if(identical(class(x), "list")){
+
+    model_index <<- 1
+    lapply(x, from_input, append_name = TRUE)
+
+  }else{
+
+    if(append_name){
+
+      if(is.null(name)) name <- "input"
+      name <- paste0(name, "_", model_index)
+      model_index <<- model_index + 1
+    }
+
+    x <- as.matrix(x)
+    layer_input(shape = dim(x)[-1], name = name)
+  }
 }
 
 #' Create Output Layer
@@ -21,58 +39,49 @@ from_input <- function(x, name = NULL){
 #' @param model A \code{keras} model.
 #' @param y A matrix or vector. The output data.
 #' @param name A string. The name of the layer.
+#' @param append_name A boolean. Toggles whether to give each
+#'  name a unique appendix. Used for backend only.
 #' @return A layer object.
 #' @importFrom keras layer_dense
 #' @export
-to_output <- function(model, y, name = NULL){
+to_output <- function(model, y, name = NULL, append_name = FALSE){
 
-  if(!is.null(dim(y))){ # if y is an array
+  if(identical(class(y), "list")){
 
-    if(length(dim(y)) == 2){ # if y is a matrix
+    model_link <<- model
+    model_index <<- 1
+    lapply(y, function(output) to_output(model_link, output, name = name, append_name = TRUE))
 
-      if(ncol(y) == 1) stop("Provide single column as vector.")
+  }else{
 
-      if(all(rowSums(y) == 1)){ # discrete outcomes
+    if(append_name){
 
-        if(ncol(y) == 2){
-
-          message("Alert: Preparing model for binary classification.")
-          return(model %>% layer_dense(units = 2, activation = 'softmax', name = name))
-
-        }else{
-
-          message("Alert: Preparing model for multi-class classification.")
-          return(model %>% layer_dense(units = ncol(y), activation = 'softmax', name = name))
-        }
-
-      }else if(all(y %in% c(0, 1))){
-
-        message("Alert: Preparing model for multi-label classification.")
-        return(model %>% layer_dense(units = ncol(y), activation = 'sigmoid', name = name))
-
-      }else{
-
-        message("Alert: Preparing model for multi-variate regression.")
-        return(model %>% layer_dense(units = ncol(y), activation = 'linear', name = name))
-      }
-
-    }else{
-
-      message("Alert: Preparing model for multi-dimensional output.")
-      return(model %>% layer_dense(units = dim(y[-1]), activation = 'linear', name = name))
+      if(is.null(name)) name <- "output"
+      name <- paste0(name, "_", model_index)
+      model_index <<- model_index + 1
     }
 
-  }else{ # if y is a vector
+    y <- as.matrix(y)
+    type <- type_of_y(y)
 
-    if(all(y %in% c(0, 1))){
+    if(type == "one-hot-encoded"){
 
-      message("Alert: Preparing model for binary classification.")
-      return(model %>% layer_dense(units = 1, activation = 'sigmoid', name = name))
+      message("Alert: Preparing model for binary or multi-class classification.")
+      return(model %>% layer_dense(units = dim(y)[-1], activation = 'softmax', name = name))
+
+    }else if(type == "multi-label"){
+
+      message("Alert: Preparing model for multi-label classification.")
+      return(model %>% layer_dense(units = dim(y)[-1], activation = 'sigmoid', name = name))
+
+    }else if(type == "continuous"){
+
+      message("Alert: Preparing model for univariate or multivariate regression.")
+      return(model %>% layer_dense(units = dim(y)[-1], activation = 'linear', name = name))
 
     }else{
 
-      message("Alert: Preparing model for uni-variate regression.")
-      return(model %>% layer_dense(units = 1, activation = 'linear', name = name))
+      stop("Type not recognized!")
     }
   }
 }

@@ -4,7 +4,7 @@
 \alias{to_output}
 \title{Create Output Layer}
 \usage{
-to_output(model, y, name = NULL)
+to_output(model, y, name = NULL, append_name = FALSE)
 }
 \arguments{
 \item{model}{A \code{keras} model.}
@@ -12,6 +12,9 @@ to_output(model, y, name = NULL)
 \item{y}{A matrix or vector. The output data.}
 
 \item{name}{A string. The name of the layer.}
+
+\item{append_name}{A boolean. Toggles whether to give each
+name a unique appendix. Used for backend only.}
 }
 \value{
 A layer object.

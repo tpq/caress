@@ -2,7 +2,7 @@
 % Please edit documentation in R/4-build.R
 \name{build}
 \alias{build}
-\title{Build a Keras Model}
+\title{Train a Keras Model}
 \usage{
 build(model, x_train, y_train, lr = 0.001, epochs = 30,
   batch_size = 128, validation_split = 0.2)
