@@ -10,13 +10,17 @@
 #' @export
 prepare <- function(input, output){
 
+  # Convert lists of lists into a list
+  input <- unlist(input, recursive = TRUE)
+  output <- unlist(output, recursive = TRUE)
+
   model <- keras::keras_model(input, output)
   print(deepviz::plot_model(model))
   print(summary(model))
   return(model)
 }
 
-#' Build a Keras Model
+#' Train a Keras Model
 #'
 #' This wrapper automatically compiles and fits a model on
 #'  the provided training data. Loss is selected automatically
@@ -37,13 +41,7 @@ build <- function(model, x_train, y_train,
                   lr = 0.001, epochs = 30, batch_size = 128,
                   validation_split = 0.2){
 
-  if(class(y_train) == "list"){
-    type <- lapply(y_train, type_of_y)
-  }else{
-    type <- type_of_y(y_train)
-  }
-
-  loss <- type2loss(type)
+  loss <- to_loss(y_train)
 
   model %>%
     keras::compile(
