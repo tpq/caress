@@ -7,14 +7,14 @@
 type_of_y(y)
 }
 \arguments{
-\item{y}{The outcome. A vector or matrix.}
+\item{y}{A matrix or vector. The output data.}
 }
 \value{
 A string.
 }
 \description{
 This function guesses the "type" of outcome based on the
- object provided. It guesses "binary", "multiclass",
- "multilabel", "multivariate", or "univariate". Used by
- \code{type2loss} to choose a loss function.
+ object provided. It guesses "one-hot-encoded", "multi-label",
+ or "continuous". Used by \code{\link{to_loss}} and
+ \code{\link{to_output}}.
 }

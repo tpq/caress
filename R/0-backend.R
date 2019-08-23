@@ -1,94 +1,61 @@
 #' Get Type for Y
 #'
 #' This function guesses the "type" of outcome based on the
-#'  object provided. It guesses "binary", "multiclass",
-#'  "multilabel", "multivariate", or "univariate". Used by
-#'  \code{type2loss} to choose a loss function.
+#'  object provided. It guesses "one-hot-encoded", "multi-label",
+#'  or "continuous". Used by \code{\link{to_loss}} and
+#'  \code{\link{to_output}}.
 #'
-#' @param y The outcome. A vector or matrix.
+#' @param y A matrix or vector. The output data.
 #' @return A string.
 #' @export
 type_of_y <- function(y){
 
-  if(!is.null(dim(y))){ # if y is an array
+  y <- as.matrix(y)
 
-    if(length(dim(y)) == 2){ # if y is a matrix
+  if(all(apply(y, 1, sum) == 1)){ # discrete outcomes -> softmax
 
-      if(ncol(y) == 1) stop("Provided matrix cannot have one column.")
+    return("one-hot-encoded")
 
-      if(all(rowSums(y) == 1)){ # discrete outcomes
+  }else if(all(y %in% c(0, 1))){ # multiple outcomes -> sigmoid
 
-        if(ncol(y) == 2){
+    return("multi-label")
 
-          return("binary")
+  }else{ # continuous -> linear
 
-        }else{
-
-          return("multiclass")
-        }
-
-      }else if(all(y %in% c(0, 1))){
-
-        return("multilabel")
-
-      }else{
-
-        return("multivariate")
-      }
-
-    }else{
-
-      return("multivariate")
-    }
-
-  }else{ # if y is a vector
-
-    if(all(y %in% c(0, 1))){
-
-      return("binary")
-
-    }else{
-
-      return("univariate")
-    }
+    return("continuous")
   }
 }
 
-#' Get Loss for Type
+#' Get Loss for Output
 #'
 #' This function guesses the loss function based on the
-#'  type of outcome returned from \code{type_of_y}. It
-#'  chooses from cross-entropy or mean squared error.
+#'  type of outcome provided to \code{y}. It chooses from
+#'  binary cross-entropy, categorical cross-entropy,
+#'  or mean squared error.
 #'
-#' @param type Choose from "binary", "multiclass",
-#'  "multilabel", "multivariate", or "univariate".
+#' @param y A matrix or vector. The output data.
 #' @return A loss function.
 #' @export
-type2loss <- function(type){
+to_loss <- function(y){
 
-  if(class(type) == "list"){
+  if(identical(class(y), "list")){
 
-    lapply(type, type2loss)
+    lapply(y, to_loss)
 
   }else{
 
-    if(type == "binary"){
+    y <- as.matrix(y)
+    type <- type_of_y(y)
 
-      return(keras::loss_binary_crossentropy)
-
-    }else if(type == "multiclass"){
+    if(type == "one-hot-encoded"){
 
       return(keras::loss_categorical_crossentropy)
 
-    }else if(type == "multilabel"){
+    }else if(type == "multi-label"){
 
       return(keras::loss_binary_crossentropy)
 
-    }else if(type == "multivariate"){
-
-      return(keras::loss_mean_squared_error)
-
-    }else if(type == "univariate"){
+    }else if(type == "continuous"){
 
       return(keras::loss_mean_squared_error)
 
