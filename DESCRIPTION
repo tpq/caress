@@ -1,6 +1,6 @@
 Package: caress
 Title: Caress, a Gentler Introduction to Keras
-Version: 0.0.4
+Version: 0.0.5
 URL: http://github.com/tpq/caress
 BugReports: http://github.com/tpq/caress/issues
 Authors@R: c(
@@ -21,3 +21,4 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
+VignetteBuilder: knitr

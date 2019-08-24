@@ -1,3 +1,13 @@
+## caress 0.0.5
+---------------------
+* Add more helper functions
+    * `layer_orthogonal_to` equals output when orthogonal to output
+* Improve front-end
+    * Fix `get_layer_output` to handle lists of input
+    * `from_input` and `to_output` now accept a vector of names
+    * `from_input` and `to_ouput` now return a named list
+    * Fix `<<-` WARNINGS
+
 ## caress 0.0.4
 ---------------------
 * Improve front-end
