@@ -4,18 +4,15 @@
 \alias{from_input}
 \title{Create Input Layer}
 \usage{
-from_input(x, name = NULL, append_name = FALSE)
+from_input(x, name = NULL)
 }
 \arguments{
-\item{x}{A matrix or vector. The input data.}
+\item{x}{A matrix or list of matrices. The input data.}
 
-\item{name}{A string. The name of the layer.}
-
-\item{append_name}{A boolean. Toggles whether to give each
-name a unique appendix. Used for backend only.}
+\item{name}{A string or character vector. The name(s) of the layer.}
 }
 \value{
-A layer object.
+A layer object (or list of layer objects).
 }
 \description{
 This function automatically creates an input layer for

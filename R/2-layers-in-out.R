@@ -3,28 +3,29 @@
 #' This function automatically creates an input layer for
 #'  a provided matrix object.
 #'
-#' @param x A matrix or vector. The input data.
-#' @param name A string. The name of the layer.
-#' @param append_name A boolean. Toggles whether to give each
-#'  name a unique appendix. Used for backend only.
-#' @return A layer object.
+#' @param x A matrix or list of matrices. The input data.
+#' @param name A string or character vector. The name(s) of the layer.
+#' @return A layer object (or list of layer objects).
 #' @importFrom keras layer_input
 #' @export
-from_input <- function(x, name = NULL, append_name = FALSE){
+from_input <- function(x, name = NULL){
 
   if(identical(class(x), "list")){
 
-    model_index <<- 1
-    lapply(x, from_input, append_name = TRUE)
+    out <- vector("list", length(x))
+    for(i in 1:length(out)){
+
+      name_i <- name
+      if(is.null(name)) name_i <- "input"
+      if(length(name) > 1) name_i <- name[i]
+      out[[i]] <- from_input(x = x[[i]], name = name_i)
+    }
+
+    layer_names <- lapply(out, function(layer) layer$name)
+    names(out) <- lapply(layer_names, function(name) unlist(strsplit(name, "/|:"))[1])
+    return(out)
 
   }else{
-
-    if(append_name){
-
-      if(is.null(name)) name <- "input"
-      name <- paste0(name, "_", model_index)
-      model_index <<- model_index + 1
-    }
 
     x <- as.matrix(x)
     layer_input(shape = dim(x)[-1], name = name)
@@ -37,29 +38,29 @@ from_input <- function(x, name = NULL, append_name = FALSE){
 #'  a provided matrix object.
 #'
 #' @param model A \code{keras} model.
-#' @param y A matrix or vector. The output data.
-#' @param name A string. The name of the layer.
-#' @param append_name A boolean. Toggles whether to give each
-#'  name a unique appendix. Used for backend only.
-#' @return A layer object.
+#' @param y A matrix or list of matrices. The output data.
+#' @param name A string or character vector. The name(s) of the layer.
+#' @return A layer object (or list of layer objects).
 #' @importFrom keras layer_dense
 #' @export
-to_output <- function(model, y, name = NULL, append_name = FALSE){
+to_output <- function(model, y, name = NULL){
 
   if(identical(class(y), "list")){
 
-    model_link <<- model
-    model_index <<- 1
-    lapply(y, function(output) to_output(model_link, output, name = name, append_name = TRUE))
+    out <- vector("list", length(y))
+    for(i in 1:length(out)){
+
+      name_i <- name
+      if(is.null(name)) name_i <- "output"
+      if(length(name) > 1) name_i <- name[i]
+      out[[i]] <- to_output(model = model, y = y[[i]], name = name_i)
+    }
+
+    layer_names <- lapply(out, function(layer) layer$name)
+    names(out) <- lapply(layer_names, function(name) unlist(strsplit(name, "/|:"))[1])
+    return(out)
 
   }else{
-
-    if(append_name){
-
-      if(is.null(name)) name <- "output"
-      name <- paste0(name, "_", model_index)
-      model_index <<- model_index + 1
-    }
 
     y <- as.matrix(y)
     type <- type_of_y(y)
