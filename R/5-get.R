@@ -13,7 +13,7 @@ get_layer_output <- function(model, data, layer){
 
   # create a Keras function to get i-th layer
   get_output <-
-    keras::k_function(inputs = model$layers[[1]]$input,
+    keras::k_function(inputs = model$input,
                       outputs = model$layers[[layer.i]]$output)
 
   # extract output
