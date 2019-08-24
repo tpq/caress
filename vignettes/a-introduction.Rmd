@@ -1,0 +1,123 @@
+---
+title: "Caress, a Gentler Introduction to Keras"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{caress-a-gentler-introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Quick start
+
+Welcome to the `caress` GitHub page!
+
+Neural networks have lots of applications. A lot of people want to learn how to use them. The keras package makes it easy to design neural network architectures. The caress package makes it even easier.
+
+```{r, eval = FALSE}
+library(devtools)
+devtools::install_github("tpq/caress")
+```
+
+This package includes some helper functions that automate bread-and-butter network building. For example, they one-hot encode factors, normalize the feature input, set the input size, set the output size, and choose the correct loss function. I also wanted to make the functional API easier to use by going `from_input` on `to_output`.
+
+```{r}
+library(keras)
+library(caress)
+data(iris)
+data <- sample_random(x = iris[,1:4], y = iris[,5], split = 80, normalize = TRUE)
+x_train <- data$train$x
+y_train <- data$train$y
+x_test <- data$test$x
+y_test <- data$test$y
+
+input <- from_input(x_train)
+output <- input %>%
+  layer_dense(units = 2, activation = "tanh") %>%
+  to_output(y_train)
+
+model <- prepare(input, output)
+```
+
+Now, we can compile and fit the model with a single function call.
+
+```{r, eval = FALSE}
+history <- build(model, x_train, y_train, epochs = 100, batch_size = 8)
+evaluate(model, x_test, y_test)
+```
+
+See the vignette for more examples.
+
+## Multiple Inputs and Outputs
+
+The `from_input` and `to_output` functions will accept lists of objects. In this case, these functions return a list of layers that you can pass through the functional API to create complex multi-input and multi-output network architectures.
+
+```{r}
+k_clear_session()
+data(iris)
+data <- sample_random(x = iris[,1:4], y = iris[,5], split = 80, normalize = TRUE)
+x_train <- data$train$x[,1:3]
+y_train <- data$train$y
+z_train <- data$train$x[,4]
+
+inputs <- from_input(list(x_train, z_train), name = c("x", "z"))
+channel1 <- inputs[[1]] %>%
+  layer_dense(units = 2, activation = "tanh") %>%
+  to_output(list(y_train, z_train), name = c("out_y", "out_z"))
+channel2 <- layer_concatenate(list(inputs[[2]], channel1[[2]])) %>%
+  layer_dense(units = 2, activation = "tanh") %>%
+  to_output(y_train, name = "out_final")
+  
+model <- prepare(inputs, list(channel1[[1]], channel2))
+```
+
+Use a named list to supply all inputs and outputs to the `build` module.
+
+```{r, eval = FALSE}
+build(model,
+      list("x" = x_train, "z" = z_train),
+      list("out_y" = y_train, "out_final" = y_train))
+```
+
+
+## Orthogonal Layers
+
+It is sometimes useful to make a layer that cannot predict an output. Below, we design a model that cannot predict "Petal.Width" from "Sepal.Length", "Sepal.Width", and "Petal.Length".
+
+```{r}
+k_clear_session()
+data(iris)
+data <- sample_random(x = iris[,1:4], y = iris[,5], split = 80, normalize = TRUE)
+x_train <- data$train$x[,1:3]
+y_train <- data$train$y
+x_test <- data$test$x[,1:3]
+y_test <- data$test$y
+z_train <- data$train$x[,4]
+z_test <- data$test$x[,4]
+
+inputs <- from_input(list(x_train, z_train), c("x", "z"))
+to_z <- inputs[[1]] %>%
+  layer_dense(units = 1, activation = "tanh", name = "hidden") %>%
+  layer_orthogonal_to(inputs[[2]])
+model <- prepare(inputs, to_z)
+```
+
+We train the model by listing "z" ("Petal.Width") as both an input and an output.
+
+```{r, results = "hide"}
+history <- build(model, list(x_train, z_train), z_train, epochs = 100, batch_size = 8)
+hidden_activation <- get_layer_output(model, list("x" = x_test, "z" = z_test),
+                                      layer = "hidden_orthogonal_to_z")
+```
+
+Yet, the hidden layer of the trained model is orthogonal to "z".
+
+```{r}
+plot(hidden_activation[,1], z_test)
+```
