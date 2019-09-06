@@ -33,12 +33,15 @@ prepare <- function(input, output){
 #'  Arguments passed to \code{keras::compile}.
 #' @param epochs,batch_size,validation_split
 #'  Arguments passed to \code{keras::fit}.
+#' @param patience_early_stopping Argument passed to
+#'  \code{keras::callback_early_stopping}.
 #' @return This function returns the history. The model
 #'  is updated in situ.
 #' @importFrom keras %>%
 #' @export
 build <- function(model, x_train, y_train,
                   lr = 0.001, epochs = 30, batch_size = 128,
+                  patience_early_stopping = 5,
                   validation_split = 0.2){
 
   loss <- to_loss(y_train)
@@ -55,6 +58,8 @@ build <- function(model, x_train, y_train,
     keras::fit(
       x_train, y_train,
       epochs = epochs, batch_size = batch_size,
+      callbacks = list(
+        keras::callback_early_stopping(patience = patience_early_stopping)),
       validation_split = validation_split
     )
 

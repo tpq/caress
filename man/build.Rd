@@ -5,7 +5,8 @@
 \title{Train a Keras Model}
 \usage{
 build(model, x_train, y_train, lr = 0.001, epochs = 30,
-  batch_size = 128, validation_split = 0.2)
+  batch_size = 128, patience_early_stopping = 5,
+  validation_split = 0.2)
 }
 \arguments{
 \item{model}{A keras model.}
@@ -16,6 +17,9 @@ Arguments passed to \code{keras::fit}.}
 \item{lr}{Arguments passed to \code{keras::compile}.}
 
 \item{epochs, batch_size, validation_split}{Arguments passed to \code{keras::fit}.}
+
+\item{patience_early_stopping}{Argument passed to
+\code{keras::callback_early_stopping}.}
 }
 \value{
 This function returns the history. The model
