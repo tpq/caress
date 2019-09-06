@@ -11,7 +11,7 @@ layer_orthogonal_to(target, reference, name = NULL)
 
 \item{reference}{The incoming layer you do not want to predict.}
 
-\item{name}{A string. The name of the layers.}
+\item{name}{A string. The prefix label for all layers.}
 }
 \value{
 A layer that equals the "reference" when the "target" is
