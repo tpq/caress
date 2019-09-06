@@ -1,3 +1,18 @@
+## caress 0.0.6
+---------------------
+* Add more helper functions
+    * `set_model_weights` sets weights for a layer
+    * `model_mirror` sets many weights based on a pre-trained "reference" model
+    * `constraint_runif` uniformly randomizes weights each cycle
+* Add new layer functions
+    * `layer_to_stereo` splits a model into two parallel layers
+    * `layer_to_stereo_and_mono` splits a model into three parallel layers
+    * `layer_pseudo_embedding` creates an embedding matrix layer
+* Improve back-end
+    * Add `callback_early_stopping` callback to `build` by default
+    * If all output is 0, treat as a regression model
+    * `build` now chooses a suitable metric
+
 ## caress 0.0.5
 ---------------------
 * Add more helper functions

@@ -111,13 +111,52 @@ model <- prepare(inputs, to_z)
 We train the model by listing "z" ("Petal.Width") as both an input and an output.
 
 ```{r, results = "hide"}
-history <- build(model, list(x_train, z_train), z_train, epochs = 100, batch_size = 8)
+history <- build(model, list(x_train, z_train), z_train, epochs = 250, batch_size = 8)
 hidden_activation <- get_layer_output(model, list("x" = x_test, "z" = z_test),
                                       layer = "hidden_orthogonal_to_z")
 ```
 
-Yet, the hidden layer of the trained model is orthogonal to "z".
+Yet, the hidden layer of the trained model is (approximately) orthogonal to "z".
 
 ```{r}
 plot(hidden_activation[,1], z_test)
+```
+
+```{r}
+hidden_activation[,1] %*% z_test
+```
+
+## Null Layers
+
+Null layers are similar to orthogonal layers, except that they emit noise instead of an orthogonal signal. For categorical output, we can make a null layer by having it predict a dummy matrix. Below, a model is trained to have two channels, one that can predict the outcome and another that cannot. Together, they are able to reconstruct the input data.
+
+```{r}
+k_clear_session()
+data(iris)
+data <- sample_random(x = iris[,1:4], y = iris[,5], split = 80, normalize = TRUE)
+x_train <- data$train$x[,1:3]
+y_train <- data$train$y
+x_test <- data$test$x[,1:3]
+y_test <- data$test$y
+
+inputs <- from_input(x_train)
+split <- inputs %>%
+  layer_to_stereo_and_mono(units = 8, name = "splitter")
+outputs <- list(
+  split$channel1 %>% to_output(y_train * 0 + (1/ncol(y_train)), name = "noY"),
+  "yesY" = split$channel2 %>% to_output(y_train, name = "yesY"),
+  "X" = split$channel12 %>% to_output(x_train, name = "X")
+)
+model <- prepare(inputs, outputs)
+```
+
+We train this model by providing a dummy matrix as one of the outputs.
+
+```{r, results = "hide"}
+history <- build(model,
+                 x_train = x_train,
+                 y_train = list("noY" = y_train * 0 + (1/ncol(y_train)),
+                   "yesY" = y_train,
+                   "X" = x_train),
+                 epochs = 100, batch_size = 8)
 ```
