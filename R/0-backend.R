@@ -16,7 +16,7 @@ type_of_y <- function(y){
 
     return("one-hot-encoded")
 
-  }else if(all(y %in% c(0, 1))){ # multiple outcomes -> sigmoid
+  }else if(all(y %in% c(0, 1)) & !all(y == 0)){ # multiple outcomes -> sigmoid
 
     return("multi-label")
 
@@ -66,45 +66,41 @@ to_loss <- function(y){
   }
 }
 
-#' Get Layer Names
+#' Get Metric for Output
 #'
-#' This function returns the names of all layers in a model.
+#' This function guesses the metric to use based on the
+#'  type of outcome provided to \code{y}. It chooses from
+#'  "accuracy" or "mean absolute percent error".
 #'
-#' @param model A keras model.
-#' @return A character vector. The layer names.
+#' @param y A matrix or vector. The output data.
+#' @return A metric.
 #' @export
-get_layer_names <- function(model){
+to_metric <- function(y){
 
-  sapply(model$layers, function(x) x$name)
-}
+  if(identical(class(y), "list")){
 
-#' Find Index for Layer Name
-#'
-#' This function returns the numeric index that corresponds
-#'  to a requested layer. If the request is a string, this function
-#'  looks up the index. If the request is an integer, this function
-#'  returns that integer.
-#'
-#' @param model A keras model.
-#' @param layer A string or integer. The requested layer.
-#' @return An integer. The requested layer's index.
-#' @export
-layer2index <- function(model, layer){
-
-  if(class(layer) == "character"){
-
-    layer.i <- which(layer == get_layer_names(model))
-    if(length(layer.i) == 0) stop("Provided 'layer' name not found.")
-
-  }else if(class(layer) == "numeric"){
-
-    layer.i <- layer
+    lapply(y, to_metric)
 
   }else{
 
-    stop("Provide 'layer' argument as character or numeric.")
+    y <- as.matrix(y)
+    type <- type_of_y(y)
 
+    if(type == "one-hot-encoded"){
+
+      return(keras::metric_categorical_accuracy)
+
+    }else if(type == "multi-label"){
+
+      return(keras::metric_binary_accuracy)
+
+    }else if(type == "continuous"){
+
+      return(keras::metric_mean_absolute_percentage_error)
+
+    }else{
+
+      stop("Type not recognized!")
+    }
   }
-
-  return(layer.i)
 }

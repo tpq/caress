@@ -42,12 +42,13 @@ build <- function(model, x_train, y_train,
                   validation_split = 0.2){
 
   loss <- to_loss(y_train)
+  metric <- to_metric(y_train)
 
   model %>%
     keras::compile(
       loss = loss,
       optimizer = keras::optimizer_rmsprop(lr = lr),
-      metrics = c('accuracy')
+      metrics = metric
     )
 
   history <- model %>%
