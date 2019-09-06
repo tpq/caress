@@ -8,7 +8,7 @@
 #' @export
 constraint_rows_to_unit_sum <- function(w){
 
-  w <- w * k_cast(k_greater_equal(w, 0), k_floatx())
+  w <- w * keras::k_cast(keras::k_greater_equal(w, 0), keras::k_floatx())
   wt <- keras::k_transpose(w)
   keras::k_transpose(wt / keras::k_sum(wt, 1))
 }
@@ -23,7 +23,7 @@ constraint_rows_to_unit_sum <- function(w){
 #' @export
 constraint_cols_to_unit_sum <- function(w){
 
-  w <- w * k_cast(k_greater_equal(w, 0), k_floatx())
+  w <- w * keras::k_cast(keras::k_greater_equal(w, 0), keras::k_floatx())
   w / keras::k_sum(w, 1)
 }
 
