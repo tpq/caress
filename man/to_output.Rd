@@ -4,14 +4,16 @@
 \alias{to_output}
 \title{Create Output Layer}
 \usage{
-to_output(model, y, name = NULL)
+to_output(object, y, name = NULL, ...)
 }
 \arguments{
-\item{model}{A \code{keras} model.}
+\item{object}{A \code{keras} model.}
 
 \item{y}{A matrix or list of matrices. The output data.}
 
 \item{name}{A string or character vector. The name(s) of the layer.}
+
+\item{...}{Arguments passed to \code{keras::layer_dense}.}
 }
 \value{
 A layer object (or list of layer objects).
