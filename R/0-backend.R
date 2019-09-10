@@ -10,7 +10,7 @@
 #' @export
 type_of_y <- function(y){
 
-  y <- as.matrix(y)
+  if(!class(y) %in% c("array", "matrix")) y <- as.matrix(y)
 
   if(all(apply(y, 1, sum) == 1)){ # discrete outcomes -> softmax
 
@@ -44,7 +44,6 @@ to_loss <- function(y){
 
   }else{
 
-    y <- as.matrix(y)
     type <- type_of_y(y)
 
     if(type == "one-hot-encoded"){
@@ -83,7 +82,6 @@ to_metric <- function(y){
 
   }else{
 
-    y <- as.matrix(y)
     type <- type_of_y(y)
 
     if(type == "one-hot-encoded"){
