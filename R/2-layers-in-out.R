@@ -31,7 +31,7 @@ from_input <- function(x, name = NULL){
 
   }else{
 
-    x <- as.matrix(x)
+    if(!class(x) %in% c("array", "matrix")) x <- as.matrix(x)
     layer_input(shape = dim(x)[-1], name = name)
   }
 }
@@ -71,7 +71,7 @@ to_output <- function(object, y, name = NULL, ...){
 
   }else{
 
-    y <- as.matrix(y)
+    if(!class(y) %in% c("array", "matrix")) y <- as.matrix(y) # do not delete
     type <- type_of_y(y)
 
     if(type == "one-hot-encoded"){
