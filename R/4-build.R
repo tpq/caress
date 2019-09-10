@@ -47,6 +47,14 @@ build <- function(model, x_train, y_train,
   loss <- to_loss(y_train)
   metric <- to_metric(y_train)
 
+  if(is.list(y_train)){ # if y is a list
+    if(is.null(names(y_train))){ # and there are no names
+      names(y_train) <- model$output_names # then name the list
+    }
+    names(loss) <- names(y_train) # pass names to loss
+    names(metric) <- names(y_train) # pass names to metric
+  }
+
   model %>%
     keras::compile(
       loss = loss,
