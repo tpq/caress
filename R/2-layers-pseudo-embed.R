@@ -22,12 +22,12 @@ layer_pseudo_embed <- function(object, embed_dim, random_embedding = FALSE, name
   }
 
   # Given D input features and M embedding features
-  input_dim <- dim(object)[[2]]
+  input_dim <- unlist(dim(object)[-1])
 
   if(random_embedding){
 
     # Create a random embedding matrix
-    rand_weights <- list(t(stats::runif(input_dim*embed_dim)))
+    rand_weights <- list(t(stats::runif(prod(input_dim)*embed_dim)))
 
     embedding_matrix <- object %>%
       # Ensure all samples have same embedding matrix by introducing a dummy node
@@ -36,7 +36,7 @@ layer_pseudo_embed <- function(object, embed_dim, random_embedding = FALSE, name
                   bias_constraint = constraint_all_ones,
                   name = paste0(name, "_erase_tensor_data")) %>%
       # The weights emited from dummy node is the embedding matrix
-      layer_dense(units = input_dim*embed_dim,
+      layer_dense(units = prod(input_dim)*embed_dim,
                   use_bias = FALSE, weights = rand_weights, trainable = FALSE,
                   name = paste0(name, "_compute_embedding_weights")) %>%
       # Shape embedding matrix as [D, M]
@@ -52,7 +52,7 @@ layer_pseudo_embed <- function(object, embed_dim, random_embedding = FALSE, name
                   bias_constraint = constraint_all_ones,
                   name = paste0(name, "_erase_tensor_data")) %>%
       # The weights emited from dummy node is the embedding matrix
-      layer_dense(units = input_dim*embed_dim,
+      layer_dense(units = prod(input_dim)*embed_dim,
                   use_bias = FALSE,
                   name = paste0(name, "_compute_embedding_weights")) %>%
       # Shape embedding matrix as [D, M]
