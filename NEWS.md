@@ -1,3 +1,15 @@
+## caress 0.0.7
+---------------------
+* Update stereo methods
+    * Rename `layer_to_stereo` to `layer_to_dense_stereo`, etc.
+    * Use `layer_add` instead of `layer_concatenate` to make the mono channel
+    * Add explicit units and activation arguments
+* Improve front-end
+    * New `layer_to_dense_DeepTRIAGE` adds a DeepTRIAGE layer
+    * `from_input` and `to_output` now correctly accept arrays
+    * `layer_pseudo_embed` should now accept arrays
+    * Now provide metrics as a named list
+
 ## caress 0.0.6
 ---------------------
 * Add more helper functions
