@@ -30,6 +30,8 @@ layer_pseudo_embed <- function(object, embed_dim, random_embedding = FALSE, name
     rand_weights <- list(t(stats::runif(prod(input_dim)*embed_dim)))
 
     embedding_matrix <- object %>%
+      # Must flatten first or else dummy node does not work!
+      layer_flatten(name = paste0(name, "_pre_erase")) %>%
       # Ensure all samples have same embedding matrix by introducing a dummy node
       layer_dense(units = 1,
                   kernel_constraint = constraint_all_zeros,
@@ -46,6 +48,8 @@ layer_pseudo_embed <- function(object, embed_dim, random_embedding = FALSE, name
   }else{
 
     embedding_matrix <- object %>%
+      # Must flatten first or else dummy node does not work!
+      layer_flatten(name = paste0(name, "_pre_erase")) %>%
       # Ensure all samples have same embedding matrix by introducing a dummy node
       layer_dense(units = 1,
                   kernel_constraint = constraint_all_zeros,
