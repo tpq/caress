@@ -4,7 +4,7 @@
 \alias{sample_random}
 \title{Split the Training and Test Set}
 \usage{
-sample_random(x, y, split = 67, normalize = TRUE)
+sample_random(x, y, split = 67, scale = FALSE, normalize = FALSE)
 }
 \arguments{
 \item{x}{The input data or a list of input data.}
@@ -13,9 +13,12 @@ sample_random(x, y, split = 67, normalize = TRUE)
 
 \item{split}{An integer. The training-test set split as a percentage.}
 
+\item{scale}{A logical. Toggles whether to scale each sample by
+the total sum, turning the measurements into proportions.}
+
 \item{normalize}{A logical. Toggles whether to normalize each
-feature by subtracting the training set mean and dividing
-by the training set standard deviation.}
+feature by subtracting the training set minimum and dividing
+by the training set range.}
 }
 \value{
 A nested list with two slots "train" and "test", each of which

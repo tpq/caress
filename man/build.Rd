@@ -4,8 +4,8 @@
 \alias{build}
 \title{Train a Keras Model}
 \usage{
-build(model, x_train, y_train, lr = 0.001, epochs = 30,
-  batch_size = 128, patience_early_stopping = 5,
+build(model, x_train, y_train, lr = 0.001, loss_weights = NULL,
+  epochs = 30, batch_size = 128, patience_early_stopping = 5,
   validation_split = 0.2)
 }
 \arguments{
@@ -14,7 +14,7 @@ build(model, x_train, y_train, lr = 0.001, epochs = 30,
 \item{x_train, y_train}{A numeric or list of numerics.
 Arguments passed to \code{keras::fit}.}
 
-\item{lr}{Arguments passed to \code{keras::compile}.}
+\item{lr, loss_weights}{Arguments passed to \code{keras::compile}.}
 
 \item{epochs, batch_size, validation_split}{Arguments passed to \code{keras::fit}.}
 
