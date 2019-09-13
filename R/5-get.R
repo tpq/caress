@@ -82,3 +82,32 @@ get_layer_weights <- function(model, layer){
   weights.obj <- model$layers[[layer.i]]$weights
   lapply(weights.obj, keras::k_eval)
 }
+
+#' Decode Output of Any Layer
+#'
+#' This function returns the output of any one layer based on
+#'  the input of any other layer. Use this function to decode
+#'  the latent space of an autoencoder.
+#'
+#' @param model A \code{keras} model.
+#' @param data A matrix or list of matrices. The input data.
+#'  See \code{\link{get_layer_output}}.
+#' @param input_at The layer name or index. From where the
+#'  input data has come.
+#' @param output_at The layer name or index. From where the
+#'  output data should come.
+#' @return An R array.
+#' @export
+model_decode <- function(model, data, input_at, output_at){
+
+  layer.i <- layer2index(model, input_at)
+  layer.j <- layer2index(model, output_at)
+
+  # create a Keras function to get i-th layer
+  get_output <-
+    keras::k_function(inputs = model$layers[[layer.i]]$input,
+                      outputs = model$layers[[layer.j]]$output)
+
+  # extract output
+  get_output(data)
+}
