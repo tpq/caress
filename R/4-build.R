@@ -29,7 +29,7 @@ prepare <- function(input, output){
 #' @param model A keras model.
 #' @param x_train,y_train A numeric or list of numerics.
 #'  Arguments passed to \code{keras::fit}.
-#' @param lr
+#' @param lr,loss_weights
 #'  Arguments passed to \code{keras::compile}.
 #' @param epochs,batch_size,validation_split
 #'  Arguments passed to \code{keras::fit}.
@@ -40,7 +40,8 @@ prepare <- function(input, output){
 #' @importFrom keras %>%
 #' @export
 build <- function(model, x_train, y_train,
-                  lr = 0.001, epochs = 30, batch_size = 128,
+                  lr = 0.001, loss_weights = NULL,
+                  epochs = 30, batch_size = 128,
                   patience_early_stopping = 5,
                   validation_split = 0.2){
 
@@ -57,9 +58,9 @@ build <- function(model, x_train, y_train,
 
   model %>%
     keras::compile(
-      loss = loss,
       optimizer = keras::optimizer_rmsprop(lr = lr),
-      metrics = metric
+      loss = loss, metrics = metric,
+      loss_weights = loss_weights
     )
 
   history <- model %>%
