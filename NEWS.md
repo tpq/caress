@@ -1,3 +1,15 @@
+## caress 0.0.8
+---------------------
+* Update stereo methods
+    * Rename `layer_to_dense_stereo_and_mono` to `layer_to_dense_stereo_and_add`
+    * Add `layer_to_dense_stereo_and_cat` to concatenate layers
+    * Add `layer_to_dense_stereo_and_diff` to subtract layers
+* Improve front-end
+    * Fix `to_output` to correctly handle arrays
+    * `sample_random` now uses min-max instead of mean-sd normalization
+    * New `model_decode` wrapper helps decode latent space
+    * Now pass `loss_weights` to `compile()`
+
 ## caress 0.0.7
 ---------------------
 * Update stereo methods
