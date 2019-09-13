@@ -74,24 +74,33 @@ to_output <- function(object, y, name = NULL, ...){
     if(!class(y) %in% c("array", "matrix")) y <- as.matrix(y) # do not delete
     type <- type_of_y(y)
 
+    output_dim <- dim(y)[-1]
+
     if(type == "one-hot-encoded"){
 
       message("Alert: Preparing model for binary or multi-class classification.")
-      return(object %>% layer_dense(units = dim(y)[-1], activation = 'softmax', name = name, ...))
+      result <- object %>% layer_dense(units = prod(output_dim), activation = 'softmax', name = name, ...)
 
     }else if(type == "multi-label"){
 
       message("Alert: Preparing model for multi-label classification.")
-      return(object %>% layer_dense(units = dim(y)[-1], activation = 'sigmoid', name = name, ...))
+      result <- object %>% layer_dense(units = prod(output_dim), activation = 'sigmoid', name = name, ...)
 
     }else if(type == "continuous"){
 
       message("Alert: Preparing model for univariate or multivariate regression.")
-      return(object %>% layer_dense(units = dim(y)[-1], activation = 'linear', name = name, ...))
+      result <- object %>% layer_dense(units = prod(output_dim), name = name, ...)
 
     }else{
 
       stop("Type not recognized!")
+    }
+
+    if(length(output_dim) > 1){
+      return(result %>%
+               layer_reshape(output_dim, name = paste0(name, "_reshape")))
+    }else{
+      return(result)
     }
   }
 }
