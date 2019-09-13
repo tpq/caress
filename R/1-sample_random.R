@@ -6,16 +6,18 @@
 #' @param x The input data or a list of input data.
 #' @param y The output data or a list of output data.
 #' @param split An integer. The training-test set split as a percentage.
+#' @param scale A logical. Toggles whether to scale each sample by
+#'  the total sum, turning the measurements into proportions.
 #' @param normalize A logical. Toggles whether to normalize each
-#'  feature by subtracting the training set mean and dividing
-#'  by the training set standard deviation.
+#'  feature by subtracting the training set minimum and dividing
+#'  by the training set range.
 #' @return A nested list with two slots "train" and "test", each of which
 #'  contain another list with two more slots "x" and "y". These provide a
 #'  list of the processed inputs and outputs, respectively.
 #'  For example, access the training input with $train$x.
 #'  You can feed these lists to \code{build}.
 #' @export
-sample_random <- function(x, y, split = 67, normalize = TRUE){
+sample_random <- function(x, y, split = 67, scale = FALSE, normalize = FALSE){
 
   # Always treat input as a list
   if(class(x) == "list"){
@@ -33,7 +35,9 @@ sample_random <- function(x, y, split = 67, normalize = TRUE){
 
   # Coerce input as matrix
   for(i in 1:length(x)){
-    x[[i]] <- as.matrix(x[[i]])
+    if(!class(x[[i]]) %in% c("array", "matrix")){
+      x[[i]] <- as.matrix(x[[i]])
+    }
   }
 
   # Coerce output as matrix
@@ -42,7 +46,9 @@ sample_random <- function(x, y, split = 67, normalize = TRUE){
       message("Alert: One-hot encoding factor.")
       y[[j]] <- keras::to_categorical(as.numeric(factor(y[[j]]))-1)
     }else{
-      y[[j]] <- as.matrix(y[[j]])
+      if(!class(y[[j]]) %in% c("array", "matrix")){
+        y[[j]] <- as.matrix(y[[j]])
+      }
     }
   }
 
@@ -57,13 +63,20 @@ sample_random <- function(x, y, split = 67, normalize = TRUE){
   Y.TRAIN <- lapply(y, function(dat) dat[train.index,])
   Y.TEST <- lapply(y, function(dat) dat[-train.index,])
 
-  # Normalize per-feature via (x - mu) / sd
+  if(scale){
+    for(i in 1:length(X.TRAIN)){
+      X.TRAIN[[i]] <- sweep(X.TRAIN[[i]], 1, rowSums(X.TRAIN[[i]], "/"))
+      X.TEST[[i]] <- sweep(X.TEST[[i]], 1, rowSums(X.TEST[[i]], "/"))
+    }
+  }
+
+  # Normalize per-feature via min-max scaling
   if(normalize){
     for(i in 1:length(X.TRAIN)){
-      m <- apply(X.TRAIN[[i]], 2, mean)
-      s <- apply(X.TRAIN[[i]], 2, stats::sd)
-      X.TRAIN[[i]] <- sweep(sweep(X.TRAIN[[i]], 2, m, "-"), 2, s, "/")
-      X.TEST[[i]] <- sweep(sweep(X.TEST[[i]], 2, m, "-"), 2, s, "/")
+      max <- apply(X.TRAIN[[i]], 2, max)
+      min <- apply(X.TRAIN[[i]], 2, min)
+      X.TRAIN[[i]] <- sweep(sweep(X.TRAIN[[i]], 2, min, "-"), 2, max-min, "/")
+      X.TEST[[i]] <- sweep(sweep(X.TEST[[i]], 2, min, "-"), 2, max-min, "/")
     }
   }
 
