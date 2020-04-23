@@ -8,9 +8,10 @@
 #' @export
 constraint_rows_to_unit_sum <- function(w){
 
-  w <- w * keras::k_cast(keras::k_greater_equal(w, 0), keras::k_floatx())
-  wt <- keras::k_transpose(w)
-  keras::k_transpose(wt / keras::k_sum(wt, 1))
+  w <- w * keras::k_cast(keras::k_greater_equal(w, 0), keras::k_floatx()) # if less than zero, make zero
+  w <- keras::k_permute_dimensions(w, c(2, 1, dim(w)[-1][-1])) # swap row to column
+  w <- w / (keras::k_sum(w, 1) + 1e-16) # add a bit of noise to prevent 0/0 error
+  keras::k_permute_dimensions(w, c(2, 1, dim(w)[-1][-1])) # swap column to row
 }
 
 #' Constrain Columns to Unit Sum
@@ -23,8 +24,8 @@ constraint_rows_to_unit_sum <- function(w){
 #' @export
 constraint_cols_to_unit_sum <- function(w){
 
-  w <- w * keras::k_cast(keras::k_greater_equal(w, 0), keras::k_floatx())
-  w / keras::k_sum(w, 1)
+  w <- w * keras::k_cast(keras::k_greater_equal(w, 0), keras::k_floatx()) # if less than zero, make zero
+  w / (keras::k_sum(w, 1) + 1e-16) # add a bit of noise to prevent 0/0 error
 }
 
 #' Constrain All Weights to Zero

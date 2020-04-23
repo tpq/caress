@@ -1,3 +1,8 @@
+## caress 0.0.9
+---------------------
+* Update constraints
+    * Fix 0 / 0 NaN problem with the unit sum constraints
+
 ## caress 0.0.8
 ---------------------
 * Update stereo methods
