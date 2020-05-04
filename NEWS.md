@@ -1,3 +1,7 @@
+## caress 0.1.1
+---------------------
+* Add `tryCatch` for `deepviz` call because of problems with lambda layer
+
 ## caress 0.1.0
 ---------------------
 * Update constraints

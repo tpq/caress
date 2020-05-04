@@ -15,7 +15,8 @@ prepare <- function(input, output){
   output <- unlist(output, recursive = TRUE)
 
   model <- keras::keras_model(input, output)
-  print(deepviz::plot_model(model))
+  tryCatch(print(deepviz::plot_model(model)),
+           error = function(e) warning("Model visualization failed."))
   print(summary(model))
   return(model)
 }
