@@ -1,3 +1,9 @@
+## caress 0.1.2
+---------------------
+* Add pairwise layers
+    * New `layer_pairwise_residual` calculates residuals for the final dimension of a tensor
+    * New `layer_pairwise_rmse` calculates RMSE based on `layer_pairwise_residual`
+
 ## caress 0.1.1
 ---------------------
 * Add `tryCatch` for `deepviz` call because of problems with lambda layer
