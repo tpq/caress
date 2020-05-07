@@ -38,7 +38,6 @@ prepare <- function(input, output){
 #'  \code{keras::callback_early_stopping}.
 #' @return This function returns the history. The model
 #'  is updated in situ.
-#' @importFrom keras %>%
 #' @export
 build <- function(model, x_train, y_train,
                   lr = 0.001, loss_weights = NULL,

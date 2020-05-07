@@ -11,7 +11,6 @@
 #' @param hidden_dim An integer. The size of the hidden layers.
 #' @param hidden_activation A string. The activation for the hidden layers.
 #' @param hidden_dropout A numeric. The dropout for the hidden layers.
-#' @importFrom keras layer_dropout layer_flatten layer_activation_softmax
 #' @export
 layer_to_dense_DeepTRIAGE <- function(object, result_dim,
                                       embed_dim = result_dim*4, random_embedding = FALSE,

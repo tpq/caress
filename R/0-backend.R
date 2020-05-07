@@ -1,3 +1,7 @@
+#' @import keras
+#' @importFrom keras %>%
+NULL
+
 #' Get Type for Y
 #'
 #' This function guesses the "type" of outcome based on the

@@ -10,7 +10,6 @@
 #' @param name A string. The prefix label for all layers.
 #' @return A layer that equals the "reference" when the "target" is
 #'  orthogonal to the "reference".
-#' @importFrom keras layer_dot layer_add
 #' @export
 layer_orthogonal_to <- function(target, reference, name = NULL){
 

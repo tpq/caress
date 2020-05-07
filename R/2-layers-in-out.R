@@ -6,7 +6,6 @@
 #' @param x A matrix or list of matrices. The input data.
 #' @param name A string or character vector. The name(s) of the layer.
 #' @return A layer object (or list of layer objects).
-#' @importFrom keras layer_input
 #' @export
 from_input <- function(x, name = NULL){
 
@@ -46,7 +45,6 @@ from_input <- function(x, name = NULL){
 #' @param name A string or character vector. The name(s) of the layer.
 #' @param ... Arguments passed to \code{keras::layer_dense}.
 #' @return A layer object (or list of layer objects).
-#' @importFrom keras layer_dense
 #' @export
 to_output <- function(object, y, name = NULL, ...){
 

@@ -12,7 +12,6 @@
 #'  matrix with random values. Otherwise, the embedding matrix is trainable.
 #' @param name A string. The prefix label for all layers.
 #' @return A layer that acts like an embedding matrix.
-#' @importFrom keras layer_dense layer_reshape layer_multiply
 #' @export
 layer_pseudo_embed <- function(object, embed_dim, random_embedding = FALSE, name = NULL){
 

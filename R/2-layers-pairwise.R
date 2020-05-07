@@ -9,7 +9,6 @@
 #' @param object The incoming layer.
 #' @param name A string. The prefix label for all layers.
 #' @return A layer of the pairwise residuals.
-#' @importFrom keras layer_reshape layer_lambda layer_subtract
 #' @export
 layer_pairwise_residual <- function(object, name = NULL){
 
@@ -47,7 +46,6 @@ layer_pairwise_residual <- function(object, name = NULL){
 #' @param object The incoming layer.
 #' @param name A string. The prefix label for all layers.
 #' @return A layer of the root mean square error.
-#' @importFrom keras layer_dense k_sqrt
 #' @export
 layer_pairwise_rmse <- function(object, name = NULL){
 
