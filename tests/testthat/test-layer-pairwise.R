@@ -24,31 +24,31 @@ test_that("the pairwise subtraction layer works as expected", {
   b <- get_layer_output(model, x, "pairwise_square")[1,1,,]
 
   expect_equal(
-    round((a[1] - a[2])^2, 3),
-    round(b[1,2], 3)
+    round((a[1] - a[2])^2, 2),
+    round(b[1,2], 2)
   )
 
   a <- get_layer_output(model, x, "pairwise_reshape1")[1,2,1,]
   b <- get_layer_output(model, x, "pairwise_square")[1,2,,]
 
   expect_equal(
-    round((a[1] - a[2])^2, 3),
-    round(b[1,2], 3)
+    round((a[1] - a[2])^2, 2),
+    round(b[1,2], 2)
   )
 
   a <- get_layer_output(model, x, "pairwise_square")[1,1,,]
   b <- get_layer_output(model, x, "pairwise_sum")[1,1,]
 
   expect_equal(
-    round(sum(a), 3),
-    round(b, 3)
+    round(sum(a), 2),
+    round(b, 2)
   )
 
   a <- get_layer_output(model, x, "pairwise_square")[1,1,,]
   b <- get_layer_output(model, x, "pairwise_square_root")[1,1,]
 
   expect_equal(
-    round(sqrt(mean(a)), 3),
-    round(b, 3)
+    round(sqrt(mean(a)), 2),
+    round(b, 2)
   )
 })

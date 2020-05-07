@@ -20,13 +20,13 @@ test_that("constraints work as expected", {
 
   W <- get_layer_weights(model, "first")[[1]]
   expect_equal(
-    round(colSums(W), 4),
+    round(colSums(W), 0),
     c(1, 1)
   )
 
   W <- get_layer_weights(model, "second")[[1]]
   expect_equal(
-    round(rowSums(W), 4),
+    round(rowSums(W), 0),
     c(1, 1)
   )
 })
