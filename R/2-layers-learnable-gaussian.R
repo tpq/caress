@@ -42,7 +42,7 @@ layer_learnable_gaussian <- function(input, size, name = NULL){
       range <- seq(-3, 3, length.out = size)
       range_cast <- k_cast(t(range), k_floatx())
       mu = x[1,1]
-      sigma = x[1,2]
+      sigma = exp(x[1,2]) # make sure sigma is always positive...
       1 / ( sigma * sqrt(2*pi) ) * exp(-.5 * ( (range_cast-mu)/sigma )^2 )
     }, name = paste0(name, "_gaussian"))
 }
@@ -109,7 +109,7 @@ layer_learnable_gaussian_conv2d_pair <- function(input, kernel_size, receptor_ro
     layer_lambda(function(x){
 
       mu = x[1,1]
-      sigma = x[1,2]
+      sigma = exp(x[1,2]) # make sure sigma is always positive...
 
       # Define receptive field in the i-th row of the filter
       filter <- array(0, c(kernel_size, 1, 1))
@@ -117,18 +117,18 @@ layer_learnable_gaussian_conv2d_pair <- function(input, kernel_size, receptor_ro
       filter_cast <- k_cast(filter, k_floatx())
 
       # Transform receptive field based on learned mu and sigma...
-      filter_as_pdf <-       1 / ( sigma * sqrt(2*pi) ) * exp(-.5 * ( (filter_cast-mu)/sigma )^2 )
+      filter_as_pdf <- 1 / ( sigma * sqrt(2*pi) ) * exp(-.5 * ( (filter_cast-mu)/sigma )^2 )
 
       # Define MASK for the i-th row of the filter -- set non-receptor cells equal to zero
       mask <- array(0, c(kernel_size, 1, 1))
       mask[receptor_row,,1,1] <- 1
       mask_cast <- k_cast(mask, k_floatx())
 
-      # Define target pair in the j-th row of the filter -- set target cell equal to one
+      # Define target pair in the j-th row of the filter -- set target cell equal to max of the PDF
       target_col <- ifelse(target_mirror, kernel_size[2], 1)
       target <- array(0, c(kernel_size, 1, 1))
-      target[target_row,target_col,1,1] <- 1
-      target_cast <- k_cast(target, k_floatx())
+      target[target_row,target_col,1,1] <- 1 # this adds a 1, but rest are zeros...
+      target_cast <- k_cast(target, k_floatx()) * (1 / ( sigma * sqrt(2*pi) )) # 1 * max = max; 0 * max = 0
 
       (filter_as_pdf * mask_cast) + target_cast
     }, name = paste0(name, "_gaussian_conv2d_pair"))

@@ -1,3 +1,9 @@
+## caress 0.1.4
+---------------------
+* Tweak learnable arrays
+    * Add exponential activation to make sure sigma remains positive
+    * Balance the values in each row of a filter pair
+
 ## caress 0.1.3
 ---------------------
 * Add learnable arrays
