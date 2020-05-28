@@ -5,6 +5,9 @@ data(iris)
 x <- as.matrix(iris[,1:4])
 y <- to_categorical(as.numeric(iris[,5])-1)
 
+k_clear_session()
+use_session_with_seed(1)
+
 input <- from_input(x, name = "input")
 output <- input %>%
   layer_dense(units = 2, activation = "linear", name = "first",
