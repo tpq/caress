@@ -1,3 +1,9 @@
+## caress 0.1.5
+---------------------
+* Update `build`
+    * Pass `monitor` argument to early stopping callback
+    * Add support for reduce LR on plateau callback
+
 ## caress 0.1.4
 ---------------------
 * Tweak learnable arrays

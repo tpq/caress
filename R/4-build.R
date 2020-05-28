@@ -34,15 +34,20 @@ prepare <- function(input, output){
 #'  Arguments passed to \code{keras::compile}.
 #' @param epochs,batch_size,validation_split
 #'  Arguments passed to \code{keras::fit}.
-#' @param patience_early_stopping Argument passed to
-#'  \code{keras::callback_early_stopping}.
+#' @param early_stopping_monitor,early_stopping_patience
+#'  Arguments passed to \code{keras::callback_early_stopping}.
+#' @param reduce_lr_monitor,reduce_lr_patience
+#'  Arguments passed to \code{keras::callback_reduce_lr_on_plateau}.
 #' @return This function returns the history. The model
 #'  is updated in situ.
 #' @export
 build <- function(model, x_train, y_train,
                   lr = 0.001, loss_weights = NULL,
                   epochs = 30, batch_size = 128,
-                  patience_early_stopping = 5,
+                  early_stopping_monitor = "val_loss",
+                  early_stopping_patience = 5,
+                  reduce_lr_monitor = "val_loss",
+                  reduce_lr_patience = epochs,
                   validation_split = 0.2){
 
   loss <- to_loss(y_train)
@@ -68,7 +73,9 @@ build <- function(model, x_train, y_train,
       x_train, y_train,
       epochs = epochs, batch_size = batch_size,
       callbacks = list(
-        keras::callback_early_stopping(patience = patience_early_stopping)),
+        keras::callback_early_stopping(monitor = early_stopping_monitor, patience = early_stopping_patience),
+        keras::callback_reduce_lr_on_plateau(monitor = reduce_lr_monitor, patience = reduce_lr_patience)
+      ),
       validation_split = validation_split
     )
 
