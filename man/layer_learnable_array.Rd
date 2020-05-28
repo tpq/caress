@@ -24,8 +24,10 @@ This function creates a layer of learnable weights. It requires connection
 \examples{
 library(keras)
 library(caress)
-x <- as.matrix(iris[,1:4])
-y <- to_categorical(as.numeric(iris[,5])-1)
+set.seed(1)
+index <- sample(1:nrow(iris))
+x <- as.matrix(iris[index,1:4])
+y <- to_categorical(as.numeric(iris[index,5])-1)
 k_clear_session()
 input <- from_input(x)
 weight <- input \%>\%
@@ -35,5 +37,5 @@ target <- layer_kernel_dot(input, weight) \%>\%
   layer_flatten() \%>\%
   to_output(y)
 m <- prepare(input, target)
-build(m, x, y)
+build(m, x, y, batch_size = 4, epochs = 100)
 }

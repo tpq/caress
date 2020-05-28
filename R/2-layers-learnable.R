@@ -11,8 +11,10 @@
 #' @examples
 #' library(keras)
 #' library(caress)
-#' x <- as.matrix(iris[,1:4])
-#' y <- to_categorical(as.numeric(iris[,5])-1)
+#' set.seed(1)
+#' index <- sample(1:nrow(iris))
+#' x <- as.matrix(iris[index,1:4])
+#' y <- to_categorical(as.numeric(iris[index,5])-1)
 #' k_clear_session()
 #' input <- from_input(x)
 #' weight <- input %>%
@@ -22,7 +24,7 @@
 #'   layer_flatten() %>%
 #'   to_output(y)
 #' m <- prepare(input, target)
-#' build(m, x, y)
+#' build(m, x, y, batch_size = 4, epochs = 100)
 #' @export
 layer_learnable_array <- function(input, array_dim, name = NULL){
 
@@ -49,8 +51,10 @@ layer_learnable_array <- function(input, array_dim, name = NULL){
 #' @examples
 #' library(keras)
 #' library(caress)
-#' x <- as.matrix(iris[,1:4])
-#' y <- to_categorical(as.numeric(iris[,5])-1)
+#' set.seed(1)
+#' index <- sample(1:nrow(iris))
+#' x <- as.matrix(iris[index,1:4])
+#' y <- to_categorical(as.numeric(iris[index,5])-1)
 #' k_clear_session()
 #' input <- from_input(x)
 #' weight <- input %>%
@@ -60,7 +64,7 @@ layer_learnable_array <- function(input, array_dim, name = NULL){
 #'   layer_flatten() %>%
 #'   to_output(y)
 #' m <- prepare(input, target)
-#' build(m, x, y)
+#' build(m, x, y, batch_size = 4, epochs = 100)
 #' @export
 layer_kernel_dot <- function(layer, kernel, name = NULL){
 
@@ -84,8 +88,10 @@ layer_kernel_dot <- function(layer, kernel, name = NULL){
 #' @examples
 #' library(keras)
 #' library(caress)
-#' x <- as.matrix(iris[,1:4])
-#' y <- to_categorical(as.numeric(iris[,5])-1)
+#' set.seed(1)
+#' index <- sample(1:nrow(iris))
+#' x <- as.matrix(iris[index,1:4])
+#' y <- to_categorical(as.numeric(iris[index,5])-1)
 #' k_clear_session()
 #' input <- from_input(x)
 #' reshape <- input %>%
@@ -98,7 +104,7 @@ layer_kernel_dot <- function(layer, kernel, name = NULL){
 #'   layer_flatten() %>%
 #'   to_output(y)
 #' m <- prepare(input, target)
-#' build(m, x, y)
+#' build(m, x, y, batch_size = 4, epochs = 100)
 #' @export
 layer_kernel_conv2d <- function(layer, kernel, name = NULL){
 
