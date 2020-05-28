@@ -10,7 +10,7 @@ Description: Neural networks have lots of applications. A lot of people want to
     learn how to use them. The keras package makes it easy to design neural
     network architectures. The caress package makes it even easier.
 License: GPL-2
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Encoding: UTF-8
 Depends:
     R (>= 3.2.2)

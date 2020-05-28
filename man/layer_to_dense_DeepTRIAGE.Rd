@@ -4,9 +4,16 @@
 \alias{layer_to_dense_DeepTRIAGE}
 \title{Apply a DeepTRIAGE Layer}
 \usage{
-layer_to_dense_DeepTRIAGE(object, result_dim, embed_dim = result_dim * 4,
-  random_embedding = FALSE, hidden_dim = 32,
-  hidden_activation = "tanh", hidden_dropout = 0.5, name = NULL)
+layer_to_dense_DeepTRIAGE(
+  object,
+  result_dim,
+  embed_dim = result_dim * 4,
+  random_embedding = FALSE,
+  hidden_dim = 32,
+  hidden_activation = "tanh",
+  hidden_dropout = 0.5,
+  name = NULL
+)
 }
 \arguments{
 \item{object}{A \code{keras} model.}

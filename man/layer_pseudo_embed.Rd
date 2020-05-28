@@ -4,8 +4,7 @@
 \alias{layer_pseudo_embed}
 \title{Create an Embedding Matrix}
 \usage{
-layer_pseudo_embed(object, embed_dim, random_embedding = FALSE,
-  name = NULL)
+layer_pseudo_embed(object, embed_dim, random_embedding = FALSE, name = NULL)
 }
 \arguments{
 \item{object}{A \code{keras} model.}

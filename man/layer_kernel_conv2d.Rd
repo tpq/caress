@@ -29,10 +29,9 @@ y <- to_categorical(as.numeric(iris[index,5])-1)
 k_clear_session()
 input <- from_input(x)
 reshape <- input \%>\%
-  layer_dense(4*20) \%>\%
-  layer_reshape(c(4,20,1))
+  layer_reshape(c(4,1,1))
 weight <- input \%>\%
-  layer_learnable_array(c(1, 20, 4)) \%>\%
+  layer_learnable_array(c(1, 1, 4)) \%>\%
   layer_lambda(f = function(x) k_transpose(x))
 target <- layer_kernel_conv2d(reshape, weight) \%>\%
   layer_flatten() \%>\%

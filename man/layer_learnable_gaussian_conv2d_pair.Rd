@@ -4,9 +4,14 @@
 \alias{layer_learnable_gaussian_conv2d_pair}
 \title{Initialize Learnable Layer}
 \usage{
-layer_learnable_gaussian_conv2d_pair(input, kernel_size,
-  receptor_row = 1, target_row = receptor_row, target_mirror = FALSE,
-  name = NULL)
+layer_learnable_gaussian_conv2d_pair(
+  input,
+  kernel_size,
+  receptor_row = 1,
+  target_row = receptor_row,
+  target_mirror = FALSE,
+  name = NULL
+)
 }
 \arguments{
 \item{input}{The incoming layer.}
@@ -50,14 +55,14 @@ y <- to_categorical(as.numeric(iris[,5])-1)
 k_clear_session()
 input <- from_input(x)
 reshape <- input \%>\%
-  layer_dense(4*20) \%>\%
-  layer_reshape(c(4,20,1))
-filter <- input \%>\%
-  layer_learnable_gaussian_conv2d_pair(c(4, 20), target_row = 1, receptor_row = 2)
-target <- layer_kernel_conv2d(reshape, filter) \%>\%
+  layer_dense(20, kernel_constraint = constraint_all_ones, use_bias = FALSE) \%>\%
+  layer_reshape(c(4,5,1))
+weight <- input \%>\%
+  layer_learnable_gaussian_conv2d_pair(c(4, 5), target_row = 2, receptor_row = 4)
+target <- layer_kernel_conv2d(reshape, weight) \%>\%
   layer_flatten() \%>\%
   to_output(y)
 m <- prepare(input, target)
-build(m, x, y)
-plot(as.numeric(get_layer_output(m, x, "input_gaussian_conv2d_pair")[2,,1,1]))
+build(m, x, y, batch_size = 4, epochs = 100)
+get_layer_output(m, x, "input_gaussian_conv2d_pair")
 }

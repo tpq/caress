@@ -4,10 +4,20 @@
 \alias{build}
 \title{Train a Keras Model}
 \usage{
-build(model, x_train, y_train, lr = 0.001, loss_weights = NULL,
-  epochs = 30, batch_size = 128, early_stopping_monitor = "val_loss",
-  early_stopping_patience = 5, reduce_lr_monitor = "val_loss",
-  reduce_lr_patience = epochs, validation_split = 0.2)
+build(
+  model,
+  x_train,
+  y_train,
+  lr = 0.001,
+  loss_weights = NULL,
+  epochs = 30,
+  batch_size = 128,
+  early_stopping_monitor = "val_loss",
+  early_stopping_patience = 5,
+  reduce_lr_monitor = "val_loss",
+  reduce_lr_patience = epochs,
+  validation_split = 0.2
+)
 }
 \arguments{
 \item{model}{A keras model.}

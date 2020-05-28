@@ -28,18 +28,19 @@ This function is probably not useful in practice, but is included
 \examples{
 library(keras)
 library(caress)
-x <- as.matrix(iris[,1:4])
-y <- to_categorical(as.numeric(iris[,5])-1)
+set.seed(1)
+index <- sample(1:nrow(iris))
+x <- as.matrix(iris[index,1:4])
+y <- to_categorical(as.numeric(iris[index,5])-1)
 k_clear_session()
 input <- from_input(x)
-input2dense <- input \%>\%
-  layer_dense(1)
 weight <- input \%>\%
-  layer_learnable_gaussian(100)
-target <- layer_lambda(list(input2dense, weight), function(x) x[[1]]+x[[2]]) \%>\%
+  layer_learnable_gaussian(4) \%>\%
+  layer_reshape(c(4,1))
+target <- layer_kernel_dot(input, weight) \%>\%
   layer_flatten() \%>\%
   to_output(y)
 m <- prepare(input, target)
-build(m, x, y)
-plot(as.numeric(get_layer_output(m, x, "input_gaussian")))
+build(m, x, y, batch_size = 4, epochs = 100)
+get_layer_output(m, x, "input_gaussian")
 }

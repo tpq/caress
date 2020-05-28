@@ -4,8 +4,13 @@
 \alias{layer_to_dense_stereo_and_add}
 \title{Split Model into Two Parallel Layers}
 \usage{
-layer_to_dense_stereo_and_add(object, units, activation = NULL,
-  name = NULL, ...)
+layer_to_dense_stereo_and_add(
+  object,
+  units,
+  activation = NULL,
+  name = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{A \code{keras} model.}
