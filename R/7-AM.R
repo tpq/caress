@@ -43,7 +43,7 @@ get_layer_loss <- function(model, layer, filter = NA){
 get_layer_gradient <- function(model, loss){
 
   grads <- k_gradients(loss, model$input)[[1]]
-  # grads / (k_sqrt(k_mean(k_square(grads))) + 1e-5)
+  grads / (k_sqrt(k_mean(k_square(grads))) + 1e-5)
 }
 
 #' Perform A Single Gradient Ascent
@@ -70,10 +70,10 @@ get_layer_gradient <- function(model, loss){
 #' gradient <- get_layer_gradient(model, loss)
 #' x <- matrix(runif(4), 1, 4)
 #' for(i in 1:20){
-#'   x <- ascend(model, x, loss, gradient, lr = 1e5)
+#'   x <- ascend(model, x, loss, gradient)
 #' }
 #' @export
-ascend <- function(model, input, loss, gradient, lr = 1e5){
+ascend <- function(model, input, loss, gradient, lr = 1){
 
   runit <- k_function(list(model$input), list(loss, gradient))
   AM_out <- runit(input)

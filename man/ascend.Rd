@@ -4,7 +4,7 @@
 \alias{ascend}
 \title{Perform A Single Gradient Ascent}
 \usage{
-ascend(model, input, loss, gradient, lr = 1e+05)
+ascend(model, input, loss, gradient, lr = 1)
 }
 \arguments{
 \item{model}{A keras model.}
@@ -39,6 +39,6 @@ loss <- get_layer_loss(model, "middle")
 gradient <- get_layer_gradient(model, loss)
 x <- matrix(runif(4), 1, 4)
 for(i in 1:20){
-  x <- ascend(model, x, loss, gradient, lr = 1e5)
+  x <- ascend(model, x, loss, gradient)
 }
 }
