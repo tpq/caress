@@ -1,21 +1,20 @@
+## caress 0.1.6
+---------------------
+* Add helper functions for gradients
+    * New `get_layer_loss` to get the loss for a layer
+    * New `get_layer_gradient` to get the gradient for a layer
+    * New `ascent` to wrap gradient ascent
+
 ## caress 0.1.5
 ---------------------
 * Update `build`
     * Pass `monitor` argument to early stopping callback
     * Add support for reduce LR on plateau callback
 
-## caress 0.1.4
----------------------
-* Tweak learnable arrays
-    * Add exponential activation to make sure sigma remains positive
-    * Balance the values in each row of a filter pair
-
 ## caress 0.1.3
 ---------------------
 * Add learnable arrays
     * New `layer_learnable_array` initializes a layer of learnable weights
-    * New `layer_learnable_gaussian` initializes a layer based on a learnable mu and sigma
-    * New `layer_learnable_gaussian_conv2d_pair` initializes a filter pair layer
 * Add backend wrappers
     * New `layer_kernel_dot` wraps `k_dot`
     * New `layer_kernel_conv2d` wraps `k_conv2d`
