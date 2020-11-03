@@ -1,3 +1,8 @@
+## caress 0.1.7
+---------------------
+* Update `build`
+    * Make it easier to pass through custom loss functions
+
 ## caress 0.1.6
 ---------------------
 * Add helper functions for gradients

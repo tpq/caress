@@ -9,6 +9,7 @@ build(
   x_train,
   y_train,
   lr = 0.001,
+  loss = NULL,
   loss_weights = NULL,
   epochs = 30,
   batch_size = 128,
@@ -26,6 +27,10 @@ build(
 Arguments passed to \code{keras::fit}.}
 
 \item{lr, loss_weights}{Arguments passed to \code{keras::compile}.}
+
+\item{loss}{A list of losses, one for each \code{y_train}. If set to NULL,
+program will choose loss automatically based on \code{y_train}.
+Argument passed to \code{keras::compile}.}
 
 \item{epochs, batch_size, validation_split}{Arguments passed to \code{keras::fit}.}
 
