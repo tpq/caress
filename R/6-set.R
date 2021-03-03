@@ -21,7 +21,8 @@ set_layer_weights <- function(model, layer, weights, freeze){
       keras::freeze_weights()
   }else{
     layer %>%
-      keras::set_weights(weights)
+      keras::set_weights(weights) %>%
+      keras::unfreeze_weights()
   }
 }
 

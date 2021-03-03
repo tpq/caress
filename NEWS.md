@@ -1,3 +1,8 @@
+## caress 0.1.8
+---------------------
+* Update `set_layer_weights`
+    * Force unfreeze when `freeze = FALSE`
+
 ## caress 0.1.7
 ---------------------
 * Update `build`

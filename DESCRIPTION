@@ -1,6 +1,6 @@
 Package: caress
 Title: Caress, a Gentler Introduction to Keras
-Version: 0.1.7
+Version: 0.1.8
 URL: http://github.com/tpq/caress
 BugReports: http://github.com/tpq/caress/issues
 Authors@R: c(
